@@ -74,7 +74,8 @@
         "@type": "WebSite",
         "@id": "https://ahmedbecett.github.io/Protection-Tele/#website",
         "url": "https://ahmedbecett.github.io/Protection-Tele/",
-        "name": "AppSpace Global Store",
+        "name": "AppSpace",
+        "alternateName": ["App Space", "فضاء التطبيقات", "متجر AppSpace", "AppSpace Store", "AppSpace Official"],
         "description": "Global Android Applications & Games Store by Ahmed Becetti",
         "inLanguage": ["en", "ar", "fr"],
         "potentialAction": {
@@ -996,6 +997,13 @@
     <section class="controls-panel">
       <div class="search-box">
         <input type="text" id="storeSearchInput" class="search-input" placeholder="🔍 Search apps and games in AppSpace..." oninput="onFilterItems()">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px;">
+          <span style="font-size:11px; color:var(--text-secondary); font-weight:bold;">🔥 Popular:</span>
+          <button class="server-pill" onclick="quickSearch('AppSpace')" style="cursor:pointer; border-color:var(--accent-cyan); color:var(--accent-cyan); background:rgba(6,182,212,0.15);">🚀 AppSpace</button>
+          <button class="server-pill" onclick="quickSearch('Photo Vault Pro')" style="cursor:pointer; border-color:var(--accent-green); color:var(--accent-green);">🛡️ Photo Vault Pro</button>
+          <button class="server-pill" onclick="quickSearch('Binance Pay')" style="cursor:pointer; border-color:var(--binance-gold); color:var(--binance-gold); background:rgba(240,185,11,0.1);">⚡ Binance Pay</button>
+          <button class="server-pill" onclick="quickSearch('Cyber Space')" style="cursor:pointer; border-color:var(--accent-purple); color:var(--accent-purple);">🎮 3D Games</button>
+        </div>
       </div>
 
       <div class="category-tabs">
@@ -1293,6 +1301,20 @@
 
     const defaultCatalog = [
       {
+        id: "appspace-official",
+        name: "AppSpace - Official App Store (فضاء التطبيقات)",
+        category: "app",
+        subCat: "tools",
+        icon: "🚀",
+        size: "v2.5.0 • 8 MB",
+        rating: "5.0 ★",
+        downloads: "+100K",
+        desc: "Official standalone AppSpace client by Ahmed Becetti. Install on your phone for lightning fast access to all apps, 3D games, and Binance Pay.",
+        isPaid: false,
+        keywords: ["appspace", "app space", "فضاء التطبيقات", "متجر", "store", "becetti"],
+        url: "https://ahmedbecett.github.io/Protection-Tele/"
+      },
+      {
         id: "1",
         name: "Photo & Video Vault Pro",
         category: "app",
@@ -1381,9 +1403,22 @@
     ];
 
     let storeCatalog = JSON.parse(localStorage.getItem('store_catalog_becetti')) || defaultCatalog;
+    // Ensure AppSpace official is always in catalog
+    if (!storeCatalog.some(i => i.id === "appspace-official")) {
+      storeCatalog.unshift(defaultCatalog[0]);
+    }
     let reviewsList = JSON.parse(localStorage.getItem('store_reviews_becetti')) || defaultReviews;
     let googleUser = JSON.parse(localStorage.getItem('protection_tele_google_user')) || null;
     let currentCategory = 'all';
+
+    function quickSearch(q) {
+      const input = document.getElementById('storeSearchInput');
+      if (input) {
+        input.value = q;
+        renderStoreGrid();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
 
     function renderStoreGrid() {
       const grid = document.getElementById('appsGrid');
@@ -1394,8 +1429,14 @@
         const matchesCat = (currentCategory === 'all') || 
                            (item.category === currentCategory) || 
                            (item.subCat === currentCategory);
-        const matchesQuery = item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
-        return matchesCat && matchesQuery;
+        if (!query) return matchesCat;
+
+        const nameMatch = item.name.toLowerCase().includes(query);
+        const descMatch = item.desc.toLowerCase().includes(query);
+        const keywordMatch = item.keywords && item.keywords.some(k => k.toLowerCase().includes(query));
+        const appSpaceMatch = (query.includes("appspace") || query.includes("app space") || query.includes("فضاء") || query.includes("متجر")) && item.id === "appspace-official";
+
+        return matchesCat && (nameMatch || descMatch || keywordMatch || appSpaceMatch);
       });
 
       if (filtered.length === 0) {
