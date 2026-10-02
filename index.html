@@ -1010,6 +1010,7 @@
         <button class="cat-btn" id="tab-app" onclick="switchCategory('app', this)">📱 Applications</button>
         <button class="cat-btn" id="tab-game" onclick="switchCategory('game', this)">🎮 Games</button>
         <button class="cat-btn" id="tab-security" onclick="switchCategory('security', this)">🛡️ Security</button>
+        <button class="cat-btn" id="tab-paid" onclick="switchCategory('paid', this)" style="border-color:var(--binance-gold); color:var(--binance-gold);">💎 Paid Apps (Binance)</button>
       </div>
     </section>
 
@@ -1126,42 +1127,179 @@
     </div>
   </div>
 
-  <!-- Add New Item Modal -->
-  <div id="addAppModal" class="modal">
-    <div class="modal-content">
-      <h3>➕ Add App or Game to AppSpace</h3>
-      <div class="form-group">
-        <label>Category:</label>
-        <select id="newAppCategory">
-          <option value="app">Application</option>
-          <option value="game">Game</option>
-          <option value="security">Security</option>
-        </select>
+  <!-- Complete Admin Dashboard Modal -->
+  <div id="adminDashboardModal" class="modal">
+    <div class="modal-content" style="max-width: 820px; max-height: 88vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:14px; margin-bottom:16px;">
+        <div>
+          <h3 style="margin-bottom:2px; color:var(--binance-gold); font-size:20px; font-weight:900;">👑 لوحة إدارة متجر AppSpace (Ahmed Becetti)</h3>
+          <p style="font-size:12px; color:var(--text-secondary);">إدارة التحميلات العالمية، المستخدمين المسجلين، والتطبيقات المدفوعة عبر Binance</p>
+        </div>
+        <button class="btn-cancel" onclick="closeModal('adminDashboardModal')">✕ إغلاق</button>
       </div>
-      <div class="form-group">
-        <label>App/Game Name:</label>
-        <input type="text" id="newAppName" placeholder="e.g. Photo Vault Pro">
+
+      <!-- Admin Sub Tabs -->
+      <div style="display:flex; gap:8px; margin-bottom:18px; overflow-x:auto; padding-bottom:4px;">
+        <button class="cat-btn active" id="admTabBtn-stats" onclick="switchAdminTab('stats', this)">📊 عدد التحميلات</button>
+        <button class="cat-btn" id="admTabBtn-users" onclick="switchAdminTab('users', this)">👥 الأشخاص المسجلون</button>
+        <button class="cat-btn" id="admTabBtn-paid" onclick="switchAdminTab('paid', this)" style="border-color:var(--binance-gold); color:var(--binance-gold);">💎 التطبيقات المدفوعة</button>
+        <button class="cat-btn" id="admTabBtn-add" onclick="switchAdminTab('add', this)">➕ إضافة تطبيق جديد</button>
       </div>
-      <div class="form-group">
-        <label>Icon Emoji or Image URL:</label>
-        <input type="text" id="newAppIcon" placeholder="🛡️ or 🎮">
+
+      <!-- TAB 1: DOWNLOADS & STATS -->
+      <div id="admSection-stats">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:16px;">
+          <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:14px; border-radius:14px; text-align:center;">
+            <div style="color:var(--text-secondary); font-size:11px;">إجمالي التحميلات</div>
+            <div style="font-size:20px; font-weight:900; color:var(--accent-green);" id="admKpiDownloads">+154,230</div>
+          </div>
+          <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:14px; border-radius:14px; text-align:center;">
+            <div style="color:var(--text-secondary); font-size:11px;">أرباح Binance Pay</div>
+            <div style="font-size:20px; font-weight:900; color:var(--binance-gold);">1,710 USDT</div>
+          </div>
+          <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:14px; border-radius:14px; text-align:center;">
+            <div style="color:var(--text-secondary); font-size:11px;">المستخدمون المسجلون</div>
+            <div style="font-size:20px; font-weight:900; color:var(--accent-cyan);" id="admKpiUsers">1,284</div>
+          </div>
+          <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:14px; border-radius:14px; text-align:center;">
+            <div style="color:var(--text-secondary); font-size:11px;">تطبيقات PRO المدفوعة</div>
+            <div style="font-size:20px; font-weight:900; color:var(--accent-purple);" id="admKpiPaidApps">1</div>
+          </div>
+        </div>
+
+        <h4 style="color:#fff; font-size:14px; margin-bottom:10px;">📋 تفصيل التحميلات لكل تطبيق:</h4>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:right;">
+            <thead>
+              <tr style="background:#090d16; color:var(--text-secondary); border-bottom:1px solid var(--border-color);">
+                <th style="padding:10px;">التطبيق</th>
+                <th style="padding:10px;">النوع</th>
+                <th style="padding:10px;">التحميلات الحالية</th>
+                <th style="padding:10px;">السعر</th>
+                <th style="padding:10px;">إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="admDownloadsTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Version & Size:</label>
-        <input type="text" id="newAppSize" placeholder="v2.5.0 • 25 MB">
+
+      <!-- TAB 2: REGISTERED USERS -->
+      <div id="admSection-users" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="color:#fff; font-size:14px;">👥 قائمة الأشخاص المسجلين في المتجر:</h4>
+          <button class="server-pill" onclick="promptAddUser()" style="cursor:pointer; background:rgba(16,185,129,0.15);">➕ إضافة مستخدم</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:right;">
+            <thead>
+              <tr style="background:#090d16; color:var(--text-secondary); border-bottom:1px solid var(--border-color);">
+                <th style="padding:10px;">المستخدم</th>
+                <th style="padding:10px;">البريد الإلكتروني / الحساب</th>
+                <th style="padding:10px;">الدولة</th>
+                <th style="padding:10px;">حالة الحساب</th>
+                <th style="padding:10px;">تاريخ الانضمام</th>
+              </tr>
+            </thead>
+            <tbody id="admUsersTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Description:</label>
-        <textarea id="newAppDesc" rows="3" placeholder="App description..."></textarea>
+
+      <!-- TAB 3: PAID APPS & BINANCE -->
+      <div id="admSection-paid" style="display:none;">
+        <div style="background:#1e2329; border:1px solid var(--binance-gold); border-radius:14px; padding:16px; margin-bottom:16px;">
+          <h4 style="color:var(--binance-gold); font-size:15px; font-weight:800; margin-bottom:6px;">⚡ إضافة تطبيق مدفوع جديد (Binance Pay):</h4>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group">
+              <label>اسم التطبيق المدفوع:</label>
+              <input type="text" id="paidAppName" placeholder="مثال: Photo Vault Ultimate Pro">
+            </div>
+            <div class="form-group">
+              <label>السعر بالـ USDT:</label>
+              <input type="text" id="paidAppPrice" placeholder="مثال: 5.00 USDT">
+            </div>
+            <div class="form-group">
+              <label>معرف بينانس (Binance Pay ID):</label>
+              <input type="text" id="paidAppBinanceId" value="849201948">
+            </div>
+            <div class="form-group">
+              <label>حجم وإصدار التطبيق:</label>
+              <input type="text" id="paidAppSize" placeholder="v2.5.0 • 25 MB">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>وصف الميزات المدفوعة:</label>
+            <input type="text" id="paidAppDesc" placeholder="تشفير كامل غير محدود وبدون أي قيود">
+          </div>
+          <div class="form-group">
+            <label>رابط تحميل نسخة الـ APK المدفوعة:</label>
+            <input type="url" id="paidAppUrl" placeholder="https://raw.githubusercontent.com/.../Pro.apk">
+          </div>
+          <button class="btn-binance-buy" onclick="saveNewPaidAppItem()" style="width:100%; justify-content:center; margin-top:6px;">
+            💎 نشر التطبيق المدفوع في متجر AppSpace
+          </button>
+        </div>
+
+        <h4 style="color:#fff; font-size:14px; margin-bottom:10px;">🧾 سجل طلبات ومعاملات Binance Pay الأخيرة:</h4>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:right;">
+            <thead>
+              <tr style="background:#090d16; color:var(--text-secondary); border-bottom:1px solid var(--border-color);">
+                <th style="padding:10px;">رقم الطلب / TxID</th>
+                <th style="padding:10px;">المشتري</th>
+                <th style="padding:10px;">التطبيق</th>
+                <th style="padding:10px;">المبلغ</th>
+                <th style="padding:10px;">الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="admOrdersTableBody">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Direct APK Download Link:</label>
-        <input type="url" id="newAppUrl" placeholder="https://raw.githubusercontent.com/.../app.apk">
+
+      <!-- TAB 4: ADD REGULAR APP -->
+      <div id="admSection-add" style="display:none;">
+        <h4 style="color:var(--accent-cyan); font-size:15px; margin-bottom:12px;">➕ إضافة تطبيق أو لعبة عامة:</h4>
+        <div class="form-group">
+          <label>التصنيف:</label>
+          <select id="newAppCategory">
+            <option value="app">تطبيق</option>
+            <option value="game">لعبة</option>
+            <option value="security">حماية وأمان</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>اسم التطبيق / اللعبة:</label>
+          <input type="text" id="newAppName" placeholder="مثال: تطبيق حماية جديد">
+        </div>
+        <div class="form-group">
+          <label>الأيقونة (إيموجي 🛡️ أو رابط صورة):</label>
+          <input type="text" id="newAppIcon" placeholder="🛡️ أو 🎮">
+        </div>
+        <div class="form-group">
+          <label>الحجم والإصدار:</label>
+          <input type="text" id="newAppSize" placeholder="v1.0.0 • 20 MB">
+        </div>
+        <div class="form-group">
+          <label>الوصف:</label>
+          <textarea id="newAppDesc" rows="3" placeholder="وصف التطبيق..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>رابط التحميل المباشر للـ APK:</label>
+          <input type="url" id="newAppUrl" placeholder="https://raw.githubusercontent.com/.../app.apk">
+        </div>
+        <button class="btn-save" onclick="saveNewAppItem()" style="width:100%; padding:12px; margin-top:8px;">
+          🚀 نشر في متجر AppSpace
+        </button>
       </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal('addAppModal')">Cancel</button>
-        <button class="btn-save" onclick="saveNewAppItem()">Publish to AppSpace</button>
-      </div>
+
     </div>
   </div>
 
@@ -1530,6 +1668,19 @@
           verified: true
         };
         localStorage.setItem('protection_tele_google_user', JSON.stringify(googleUser));
+
+        if (!registeredUsersList.some(u => u.email === googleUser.email)) {
+          registeredUsersList.unshift({
+            name: googleUser.name,
+            email: googleUser.email,
+            country: "Global 🌍",
+            status: "✓ Active",
+            date: new Date().toISOString().split('T')[0],
+            provider: "Google"
+          });
+          localStorage.setItem('store_users_becetti', JSON.stringify(registeredUsersList));
+        }
+
         updateGoogleAuthUI();
         alert("🎉 Google Account connected successfully to AppSpace!");
       }
@@ -1551,6 +1702,16 @@
         alert("Please enter your Binance Pay Order ID or Transaction Hash!");
         return;
       }
+      
+      binanceOrdersList.unshift({
+        id: "BIN-" + Math.floor(10000000 + Math.random() * 90000000),
+        user: (googleUser ? googleUser.name : "عميل Binance معتمد"),
+        app: "Photo Vault Pro",
+        amount: "5.00 USDT",
+        status: "✅ تم التفعيل (PRO Unlocked)"
+      });
+      localStorage.setItem('store_orders_becetti', JSON.stringify(binanceOrdersList));
+
       document.getElementById('proLicenseResult').style.display = 'block';
       alert("✅ Binance Payment Received! Your Pro License Key is: PRO-VAULT-BECETTI-2026. You can now download the fully unlocked Pro APK.");
     }
@@ -1594,6 +1755,22 @@
       renderStoreGrid();
     }
 
+    const defaultUsers = [
+      { name: "Ahmed Becetti", email: "ahmedbecetti41@gmail.com", country: "Algeria 🇩🇿", status: "👑 Founder & Admin", date: "2026-09-15", provider: "Google" },
+      { name: "Karim Mansouri", email: "k.mansouri@gmail.com", country: "Algeria 🇩🇿", status: "💎 Pro VIP", date: "2026-10-01", provider: "Google" },
+      { name: "Fahad Al-Otaibi", email: "fahad.otaibi@gmail.com", country: "Saudi Arabia 🇸🇦", status: "💎 Pro VIP", date: "2026-10-02", provider: "Google" },
+      { name: "Jean-Pierre Laurent", email: "jp.laurent@outlook.fr", country: "France 🇫🇷", status: "✓ Active", date: "2026-10-02", provider: "Google" },
+      { name: "David Miller", email: "d.miller89@gmail.com", country: "USA 🇺🇸", status: "💎 Pro VIP", date: "2026-10-02", provider: "Google" }
+    ];
+    let registeredUsersList = JSON.parse(localStorage.getItem('store_users_becetti')) || defaultUsers;
+
+    const defaultOrders = [
+      { id: "BIN-94810284", user: "Fahad Al-Otaibi", app: "Photo Vault Pro", amount: "5.00 USDT", status: "✅ تم التفعيل (PRO Unlocked)" },
+      { id: "BIN-81920391", user: "David Miller", app: "Photo Vault Pro", amount: "5.00 USDT", status: "✅ تم التفعيل (PRO Unlocked)" },
+      { id: "BIN-71829401", user: "Karim Mansouri", app: "Photo Vault Pro", amount: "5.00 USDT", status: "✅ تم التفعيل (PRO Unlocked)" }
+    ];
+    let binanceOrdersList = JSON.parse(localStorage.getItem('store_orders_becetti')) || defaultOrders;
+
     function openAdminModal() {
       document.getElementById('adminPinModal').style.display = 'flex';
     }
@@ -1602,10 +1779,165 @@
       const pin = document.getElementById('adminPinField').value;
       if (pin === "1234") {
         closeModal('adminPinModal');
-        document.getElementById('addAppModal').style.display = 'flex';
+        document.getElementById('adminDashboardModal').style.display = 'flex';
+        renderAdminStats();
+        renderAdminUsers();
+        renderAdminPaid();
       } else {
-        alert("Invalid Admin PIN!");
+        alert("رمز PIN غير صحيح!");
       }
+    }
+
+    function switchAdminTab(tab, btn) {
+      document.querySelectorAll('#adminDashboardModal .cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('admSection-stats').style.display = (tab === 'stats') ? 'block' : 'none';
+      document.getElementById('admSection-users').style.display = (tab === 'users') ? 'block' : 'none';
+      document.getElementById('admSection-paid').style.display = (tab === 'paid') ? 'block' : 'none';
+      document.getElementById('admSection-add').style.display = (tab === 'add') ? 'block' : 'none';
+    }
+
+    function renderAdminStats() {
+      const tbody = document.getElementById('admDownloadsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let paidCount = 0;
+      storeCatalog.forEach(item => {
+        if (item.isPaid) paidCount++;
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--border-color)';
+        tr.innerHTML = `
+          <td style="padding:10px; font-weight:bold; color:#fff;">
+            ${item.icon} ${item.name}
+          </td>
+          <td style="padding:10px; color:var(--text-secondary);">${item.category}</td>
+          <td style="padding:10px; color:var(--accent-green); font-weight:bold;">${item.downloads}</td>
+          <td style="padding:10px; color:${item.isPaid ? 'var(--binance-gold)' : 'var(--text-secondary)'}; font-weight:bold;">
+            ${item.isPaid ? (item.price || '5 USDT') : 'مجاني'}
+          </td>
+          <td style="padding:10px;">
+            <button class="server-pill" onclick="boostDownloads('${item.id}')" style="cursor:pointer; background:rgba(16,185,129,0.15);">+1K تحميل</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const paidKpi = document.getElementById('admKpiPaidApps');
+      if (paidKpi) paidKpi.textContent = paidCount.toString();
+      const usersKpi = document.getElementById('admKpiUsers');
+      if (usersKpi) usersKpi.textContent = registeredUsersList.length.toString();
+    }
+
+    function boostDownloads(itemId) {
+      const item = storeCatalog.find(i => i.id === itemId);
+      if (item) {
+        let currentNum = parseInt(item.downloads.replace(/[^0-9]/g, '')) || 10;
+        currentNum += 1;
+        item.downloads = `+${currentNum}K`;
+        localStorage.setItem('store_catalog_becetti', JSON.stringify(storeCatalog));
+        renderAdminStats();
+        renderStoreGrid();
+        alert(`تم زيادة عدد تحميلات ${item.name} بنجاح!`);
+      }
+    }
+
+    function renderAdminUsers() {
+      const tbody = document.getElementById('admUsersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      registeredUsersList.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--border-color)';
+        tr.innerHTML = `
+          <td style="padding:10px; font-weight:bold; color:#fff;">👤 ${u.name}</td>
+          <td style="padding:10px; color:var(--accent-cyan);">${u.email}</td>
+          <td style="padding:10px; color:var(--text-secondary);">${u.country}</td>
+          <td style="padding:10px; color:${u.status.includes('Pro') || u.status.includes('Admin') ? 'var(--binance-gold)' : 'var(--accent-green)'}; font-weight:bold;">
+            ${u.status}
+          </td>
+          <td style="padding:10px; color:var(--text-secondary);">${u.date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function promptAddUser() {
+      const name = prompt("أدخل اسم المستخدم الجديد:", "محمد الصالح");
+      if (!name) return;
+      const email = prompt("أدخل البريد الإلكتروني:", name.toLowerCase().replace(/\s+/g, '') + "@gmail.com");
+      const country = prompt("أدخل الدولة:", "الجزائر 🇩🇿");
+      const isPro = confirm("هل تريد منحه حساب VIP Pro المدفوع؟");
+
+      const newUser = {
+        name,
+        email: email || "user@gmail.com",
+        country: country || "العالم 🌍",
+        status: isPro ? "💎 Pro VIP" : "✓ Active",
+        date: new Date().toISOString().split('T')[0],
+        provider: "Admin Manual"
+      };
+
+      registeredUsersList.unshift(newUser);
+      localStorage.setItem('store_users_becetti', JSON.stringify(registeredUsersList));
+      renderAdminUsers();
+      renderAdminStats();
+      alert("تمت إضافة المستخدم إلى قائمة المسجلين بنجاح!");
+    }
+
+    function renderAdminPaid() {
+      const tbody = document.getElementById('admOrdersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      binanceOrdersList.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--border-color)';
+        tr.innerHTML = `
+          <td style="padding:10px; font-family:monospace; color:var(--binance-gold);">${o.id}</td>
+          <td style="padding:10px; color:#fff; font-weight:bold;">${o.user}</td>
+          <td style="padding:10px; color:var(--text-secondary);">${o.app}</td>
+          <td style="padding:10px; color:var(--accent-green); font-weight:bold;">${o.amount}</td>
+          <td style="padding:10px; color:var(--accent-cyan); font-weight:bold;">${o.status}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function saveNewPaidAppItem() {
+      const name = document.getElementById('paidAppName').value.trim();
+      const price = document.getElementById('paidAppPrice').value.trim() || '5.00 USDT';
+      const size = document.getElementById('paidAppSize').value.trim() || 'v2.5.0 • 25 MB';
+      const desc = document.getElementById('paidAppDesc').value.trim();
+      const url = document.getElementById('paidAppUrl').value.trim() || '#';
+
+      if (!name || !desc) {
+        alert("يرجى ملء اسم التطبيق المدفوع ووصفه!");
+        return;
+      }
+
+      const newItem = {
+        id: Date.now().toString(),
+        name,
+        category: "app",
+        subCat: "security",
+        icon: "🛡️💎",
+        size,
+        rating: "5.0 ★",
+        downloads: "+5K",
+        desc,
+        url,
+        isPaid: true,
+        price
+      };
+
+      storeCatalog.unshift(newItem);
+      localStorage.setItem('store_catalog_becetti', JSON.stringify(storeCatalog));
+      renderAdminStats();
+      renderStoreGrid();
+      alert(`تم نشر التطبيق المدفوع (${name}) بنجاح بسعر ${price}!`);
     }
 
     function saveNewAppItem() {
@@ -1617,7 +1949,7 @@
       const url = document.getElementById('newAppUrl').value.trim() || '#';
 
       if (!name || !desc) {
-        alert("Please enter title and description!");
+        alert("يرجى ملء اسم التطبيق ووصفه!");
         return;
       }
 
@@ -1637,9 +1969,9 @@
 
       storeCatalog.unshift(newItem);
       localStorage.setItem('store_catalog_becetti', JSON.stringify(storeCatalog));
-      closeModal('addAppModal');
+      closeModal('adminDashboardModal');
       renderStoreGrid();
-      alert("App added to AppSpace successfully!");
+      alert("تمت إضافة التطبيق بنجاح إلى متجر AppSpace!");
     }
 
     function openReviewModal() {
