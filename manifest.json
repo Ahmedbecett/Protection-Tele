@@ -1,0 +1,18 @@
+{
+  "name": "Protection-Tele Store",
+  "short_name": "Protection-Tele",
+  "description": "متجر تطبيقات وألعاب الأندرويد الرسمي للمطور Ahmed Becetti",
+  "start_url": "https://ahmedbecett.github.io/Protection-Tele/",
+  "display": "standalone",
+  "background_color": "#080c14",
+  "theme_color": "#10b981",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Ahmedbecett/Protection-Tele/main/store_icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
