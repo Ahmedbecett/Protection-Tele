@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap Index for Google, Bing, and Search Engines
+Sitemap: https://ahmedbecett.github.io/Protection-Tele/sitemap.xml
