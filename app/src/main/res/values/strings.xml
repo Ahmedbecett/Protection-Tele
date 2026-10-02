@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Protection Téléphone</string>
+    <string name="tab_dashboard">Accueil</string>
+    <string name="tab_antivirus">Antivirus</string>
+    <string name="tab_cleaner">Nettoyeur</string>
+    <string name="tab_boost">Optimiseur</string>
+    <string name="tab_privacy">Sécurité</string>
+    <string name="scan_now">Analyser maintenant</string>
+    <string name="clean_now">Nettoyer les fichiers indésirables</string>
+    <string name="system_status_safe">Appareil Protégé</string>
+    <string name="system_status_warning">Menaces Potentielles</string>
+    <string name="system_status_danger">Attention : Risque Détecté</string>
+</resources>
