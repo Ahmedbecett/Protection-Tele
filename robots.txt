@@ -1,5 +1,21 @@
 User-agent: *
 Allow: /
+Crawl-delay: 1
 
-# Sitemap Index for Google, Bing, and Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Global Sitemaps for Google, Bing & Search Engines
 Sitemap: https://ahmedbecett.github.io/Protection-Tele/sitemap.xml
