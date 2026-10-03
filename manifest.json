@@ -1,7 +1,7 @@
 {
-  "name": "AppSpace Store",
-  "short_name": "AppSpace",
-  "description": "Global Android Applications & Games Store by Ahmed Becetti",
+  "name": "ahmedbecetti store - Protection-Tele",
+  "short_name": "ahmedbecetti stor",
+  "description": "ahmedbecetti store - Global Android Applications & Games Store by Ahmed Becetti",
   "start_url": "https://ahmedbecett.github.io/Protection-Tele/",
   "display": "standalone",
   "background_color": "#080c14",
